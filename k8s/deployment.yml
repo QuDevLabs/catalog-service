@@ -13,6 +13,10 @@ spec:
     metadata:
       labels:
         app: catalog-service
+      annotations:
+        prometheus.io/scrape: "true" # 告知Prometheus要抓取该Pod中的容器
+        prometheus.io/path: /actuator/prometheus # 确定暴露Prometheus度量的HTTP端点
+        prometheus.io/port: "9001" # 声明度量端点可用的端口号
     spec:
       containers:
         - name: catalog-service
@@ -33,3 +37,17 @@ spec:
               value: jdbc:postgresql://polar-postgres/polardb_catalog
             - name: SPRING_PROFILES_ACTIVE
               value: testdata
+            - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI
+              value: http://polar-keycloak/realms/PolarBookshop
+          livenessProbe: # 配置存活探针
+            httpGet: # 使用HTTP GET请求以获取存活状态
+              path: /actuator/health/liveness # 获取存活状态所要调用的端点
+              port: 9001 # 获取存活状态所要使用的端口
+            initialDelaySeconds: 10 # 在开始检查存活状态之前的初始延迟
+            periodSeconds: 5 # 检查存活状态的频率
+          readinessProbe: # 就绪探针的配置
+            httpGet:
+              path: /actuator/health/readiness
+              port: 9001
+            initialDelaySeconds: 5
+            periodSeconds: 15
