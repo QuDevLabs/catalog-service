@@ -25,7 +25,7 @@ spec:
           lifecycle:
             preStop:
               exec:
-                command: [ "sh", "-c", "sleep 5" ]
+                command: [ "sh", "-c", "sleep 5" ] # 在容器终止之前执行的命令，等待5秒以完成正在处理的请求
           ports:
             - containerPort: 9001
           env:

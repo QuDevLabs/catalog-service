@@ -27,9 +27,11 @@ public class SecurityConfig {
                         .anyRequest().hasRole("employee")
                 )
                 // 使用基于JWT的默认配置启用OAuth2资源服务器
-                .oauth2ResourceServer(configurer -> configurer.jwt(Customizer.withDefaults()))
+                .oauth2ResourceServer(
+                        configurer -> configurer.jwt(Customizer.withDefaults()))
                 // 每个请求必须包含访问令牌，所以没有必要在不同的请求间保持用户会话。我们希望它是无状态的
-                .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .sessionManagement(
+                        sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 // 因为认证策略是无状态的，并不涉及基于浏览器的客户端，所以我们可以安全的禁用CSRF防护
                 .csrf(AbstractHttpConfigurer::disable)
                 .build();

@@ -9,14 +9,14 @@ import jakarta.validation.constraints.Positive;
 
 import org.springframework.data.annotation.*;
 
-public record Book(
+public record Book( // 领域模型是以record的形式定义的，这样可以简化代码并且提供不可变性
 
         @Id
         Long id,
 
         @NotBlank(message = "The book ISBN must be defined.")
         @Pattern(regexp = "^([0-9]{10}|[0-9]{13})$", message = "The ISBN format must be valid.")
-        String isbn,
+        String isbn, // 图书的唯一标识
 
         @NotBlank(message = "The book title must be defined.")
         String title,
@@ -25,7 +25,7 @@ public record Book(
         String author,
 
         @NotNull(message = "The book price must be defined.")
-        @Positive(message = "The book price must be greater than zero.")
+        @Positive(message = "The book price must be greater than zero.") // 注解所标注的元素不能为空，并且值要大于零
         Double price,
 
         String publisher,

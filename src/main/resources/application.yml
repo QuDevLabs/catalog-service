@@ -12,27 +12,27 @@ spring:
   application:
     name: catalog-service
   lifecycle:
-    timeout-per-shutdown-phase: 15s
+    timeout-per-shutdown-phase: 15s # 优雅关机的超时时间，单位为秒
   config:
     import: "optional:configserver:"
   cloud:
     config:
-      uri: http://localhost:8888
-      request-connect-timeout: 5000 # 5s
-      request-read-timeout: 5000 # 5s
-      fail-fast: false # In production, set to true
+      uri: ${SPRING_CLOUD_CONFIG_URI:http://localhost:8888}
+      request-connect-timeout: 5000 # 等待连接配置服务器的超时时间，单位为毫秒
+      request-read-timeout: 5000 # 等待从配置服务器读取数据的超时时间，单位为毫秒
+      fail-fast: false # 允许应用在配置服务器不可用时启动
       retry:
-        max-attempts: 6
-        initial-interval: 1000 # 1s
-        max-interval: 2000 # 2s
-        multiplier: 1.1
+        max-attempts: 6 # 最大尝试次数
+        initial-interval: 1000 # Backoff初始间隔时间，单位为毫秒
+        max-interval: 2000 # Backoff最大间隔时间，单位为毫秒
+        multiplier: 1.1 # Backoff间隔时间的乘数，增加重试之间的等待时间
   datasource:
     username: user
     password: password
     url: jdbc:postgresql://localhost:5432/polardb_catalog
     hikari:
-      connection-timeout: 2000 #ms
-      maximum-pool-size: 5
+      connection-timeout: 2000 # 从池中获取连接的超时时间，单位为毫秒
+      maximum-pool-size: 5 # 连接池的最大连接数
   security:
     oauth2:
       resourceserver:

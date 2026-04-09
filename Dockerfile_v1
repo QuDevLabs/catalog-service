@@ -1,5 +1,9 @@
 FROM eclipse-temurin:17
+# 将当前的工作目录变更为workspace
 WORKDIR workspace
+# 构建参数，声明了项目中Jar文件的位置，默认值为build/libs/*.jar
 ARG JAR_FILE=build/libs/*.jar
+# 将构建参数指定的Jar文件复制到镜像中，并命名为catalog-service.jar
 COPY ${JAR_FILE} catalog-service.jar
+# 运行命令，使用java -jar命令来启动应用程序，指定要运行的Jar文件为catalog-service.jar
 ENTRYPOINT ["java", "-jar", "catalog-service.jar"]
